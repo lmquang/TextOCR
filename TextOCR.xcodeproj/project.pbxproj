@@ -1,0 +1,590 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		74311CC02EB5F0680074FC07 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 74311CBF2EB5F0680074FC07 /* KeyboardShortcuts */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		743D87912EB4AD3700E28D62 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 743D877A2EB4AD3500E28D62 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 743D87812EB4AD3500E28D62;
+			remoteInfo = TextOCR;
+		};
+		743D879B2EB4AD3700E28D62 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 743D877A2EB4AD3500E28D62 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 743D87812EB4AD3500E28D62;
+			remoteInfo = TextOCR;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		743D87822EB4AD3500E28D62 /* TextOCR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TextOCR.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		743D87902EB4AD3700E28D62 /* TextOCRTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextOCRTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		743D879A2EB4AD3700E28D62 /* TextOCRUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TextOCRUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		743D87842EB4AD3500E28D62 /* TextOCR */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TextOCR;
+			sourceTree = "<group>";
+		};
+		743D87932EB4AD3700E28D62 /* TextOCRTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TextOCRTests;
+			sourceTree = "<group>";
+		};
+		743D879D2EB4AD3700E28D62 /* TextOCRUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TextOCRUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		743D877F2EB4AD3500E28D62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74311CC02EB5F0680074FC07 /* KeyboardShortcuts in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D878D2EB4AD3700E28D62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D87972EB4AD3700E28D62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		743D87792EB4AD3500E28D62 = {
+			isa = PBXGroup;
+			children = (
+				743D87842EB4AD3500E28D62 /* TextOCR */,
+				743D87932EB4AD3700E28D62 /* TextOCRTests */,
+				743D879D2EB4AD3700E28D62 /* TextOCRUITests */,
+				743D87832EB4AD3500E28D62 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		743D87832EB4AD3500E28D62 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				743D87822EB4AD3500E28D62 /* TextOCR.app */,
+				743D87902EB4AD3700E28D62 /* TextOCRTests.xctest */,
+				743D879A2EB4AD3700E28D62 /* TextOCRUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		743D87812EB4AD3500E28D62 /* TextOCR */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 743D87A42EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCR" */;
+			buildPhases = (
+				743D877E2EB4AD3500E28D62 /* Sources */,
+				743D877F2EB4AD3500E28D62 /* Frameworks */,
+				743D87802EB4AD3500E28D62 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				743D87842EB4AD3500E28D62 /* TextOCR */,
+			);
+			name = TextOCR;
+			packageProductDependencies = (
+				74311CBF2EB5F0680074FC07 /* KeyboardShortcuts */,
+			);
+			productName = TextOCR;
+			productReference = 743D87822EB4AD3500E28D62 /* TextOCR.app */;
+			productType = "com.apple.product-type.application";
+		};
+		743D878F2EB4AD3700E28D62 /* TextOCRTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 743D87A72EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCRTests" */;
+			buildPhases = (
+				743D878C2EB4AD3700E28D62 /* Sources */,
+				743D878D2EB4AD3700E28D62 /* Frameworks */,
+				743D878E2EB4AD3700E28D62 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				743D87922EB4AD3700E28D62 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				743D87932EB4AD3700E28D62 /* TextOCRTests */,
+			);
+			name = TextOCRTests;
+			packageProductDependencies = (
+			);
+			productName = TextOCRTests;
+			productReference = 743D87902EB4AD3700E28D62 /* TextOCRTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		743D87992EB4AD3700E28D62 /* TextOCRUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 743D87AA2EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCRUITests" */;
+			buildPhases = (
+				743D87962EB4AD3700E28D62 /* Sources */,
+				743D87972EB4AD3700E28D62 /* Frameworks */,
+				743D87982EB4AD3700E28D62 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				743D879C2EB4AD3700E28D62 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				743D879D2EB4AD3700E28D62 /* TextOCRUITests */,
+			);
+			name = TextOCRUITests;
+			packageProductDependencies = (
+			);
+			productName = TextOCRUITests;
+			productReference = 743D879A2EB4AD3700E28D62 /* TextOCRUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		743D877A2EB4AD3500E28D62 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					743D87812EB4AD3500E28D62 = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					743D878F2EB4AD3700E28D62 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 743D87812EB4AD3500E28D62;
+					};
+					743D87992EB4AD3700E28D62 = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 743D87812EB4AD3500E28D62;
+					};
+				};
+			};
+			buildConfigurationList = 743D877D2EB4AD3500E28D62 /* Build configuration list for PBXProject "TextOCR" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 743D87792EB4AD3500E28D62;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				74311CBE2EB5F0680074FC07 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 743D87832EB4AD3500E28D62 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				743D87812EB4AD3500E28D62 /* TextOCR */,
+				743D878F2EB4AD3700E28D62 /* TextOCRTests */,
+				743D87992EB4AD3700E28D62 /* TextOCRUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		743D87802EB4AD3500E28D62 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D878E2EB4AD3700E28D62 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D87982EB4AD3700E28D62 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		743D877E2EB4AD3500E28D62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D878C2EB4AD3700E28D62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		743D87962EB4AD3700E28D62 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		743D87922EB4AD3700E28D62 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 743D87812EB4AD3500E28D62 /* TextOCR */;
+			targetProxy = 743D87912EB4AD3700E28D62 /* PBXContainerItemProxy */;
+		};
+		743D879C2EB4AD3700E28D62 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 743D87812EB4AD3500E28D62 /* TextOCR */;
+			targetProxy = 743D879B2EB4AD3700E28D62 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		743D87A22EB4AD3700E28D62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		743D87A32EB4AD3700E28D62 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		743D87A52EB4AD3700E28D62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TextOCR/TextOCR.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TextOCR/App/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs screen recording permission to capture screenshots for text recognition.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		743D87A62EB4AD3700E28D62 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TextOCR/TextOCR.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TextOCR/App/Info.plist;
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs screen recording permission to capture screenshots for text recognition.";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCR;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		743D87A82EB4AD3700E28D62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCRTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextOCR.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TextOCR";
+			};
+			name = Debug;
+		};
+		743D87A92EB4AD3700E28D62 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 15.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCRTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TextOCR.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TextOCR";
+			};
+			name = Release;
+		};
+		743D87AB2EB4AD3700E28D62 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCRUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = TextOCR;
+			};
+			name = Debug;
+		};
+		743D87AC2EB4AD3700E28D62 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 54PH5Y72WR;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dwr.TextOCRUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TEST_TARGET_NAME = TextOCR;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		743D877D2EB4AD3500E28D62 /* Build configuration list for PBXProject "TextOCR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				743D87A22EB4AD3700E28D62 /* Debug */,
+				743D87A32EB4AD3700E28D62 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		743D87A42EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCR" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				743D87A52EB4AD3700E28D62 /* Debug */,
+				743D87A62EB4AD3700E28D62 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		743D87A72EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCRTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				743D87A82EB4AD3700E28D62 /* Debug */,
+				743D87A92EB4AD3700E28D62 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		743D87AA2EB4AD3700E28D62 /* Build configuration list for PBXNativeTarget "TextOCRUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				743D87AB2EB4AD3700E28D62 /* Debug */,
+				743D87AC2EB4AD3700E28D62 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		74311CBE2EB5F0680074FC07 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sindresorhus/KeyboardShortcuts";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		74311CBF2EB5F0680074FC07 /* KeyboardShortcuts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 74311CBE2EB5F0680074FC07 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
+			productName = KeyboardShortcuts;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 743D877A2EB4AD3500E28D62 /* Project object */;
+}
