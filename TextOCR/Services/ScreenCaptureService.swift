@@ -579,10 +579,16 @@ class SelectionView: NSView {
         let attributedString = NSAttributedString(string: " \(dimensionText) ", attributes: attributes)
         let textSize = attributedString.size()
 
-        // Position label at top-left of selection, slightly offset
-        let labelX = selectionRect.origin.x + 8
-        let labelY = selectionRect.origin.y + selectionRect.height - textSize.height - 8
-        let labelRect = CGRect(x: labelX, y: labelY, width: textSize.width, height: textSize.height)
+        // Position label above the selection box with a small gap
+        let gap: CGFloat = 8
+        let labelX = selectionRect.origin.x
+        let labelY = selectionRect.origin.y + selectionRect.height + gap
+
+        // Ensure label stays within bounds
+        let maxY = bounds.height - textSize.height
+        let finalY = min(labelY, maxY)
+
+        let labelRect = CGRect(x: labelX, y: finalY, width: textSize.width, height: textSize.height)
 
         attributedString.draw(in: labelRect)
     }
