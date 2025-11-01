@@ -32,8 +32,7 @@ xcodebuild \
     -configuration "$CONFIGURATION" \
     -derivedDataPath "$BUILD_DIR" \
     clean build \
-    CODE_SIGN_IDENTITY="-" \
-    CODE_SIGNING_REQUIRED=NO
+    CODE_SIGN_IDENTITY="-"
 
 # Find the built app
 BUILT_APP_PATH=$(find "$BUILD_DIR" -name "$APP_NAME" -type d | head -n 1)

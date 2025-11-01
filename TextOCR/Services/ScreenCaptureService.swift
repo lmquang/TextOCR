@@ -114,6 +114,8 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
 
     var onFinished: ((CGRect?) -> Void)?
     private var resultRect: CGRect?
+    private var cursorGuardTimer: DispatchSourceTimer?
+    private var hasEstablishedCursor = false
 
     init() {
         let window = SelectionWindow()
@@ -122,6 +124,11 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
         window.isReleasedWhenClosed = false  // Critical: Let ARC manage lifetime
         window.delegate = self
         window.controller = self  // Set controller reference
+
+        // Wire up the selection view to controller
+        if let selectionView = window.contentView as? SelectionView {
+            selectionView.controller = self
+        }
     }
 
     required init?(coder: NSCoder) {
@@ -129,8 +136,16 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
     }
 
     func show() {
-        window?.makeKeyAndOrderFront(nil)
+        guard let window = window else { return }
+
+        // Freeze cursor rect updates during window activation
+        window.disableCursorRects()
+
+        // Activate app and make window key
         NSApp.activate(ignoringOtherApps: true)
+        window.makeKeyAndOrderFront(nil)
+
+        // Cursor will be activated in windowDidBecomeKey
     }
 
     /// Call this when user completes or cancels selection
@@ -151,8 +166,64 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
         }
     }
 
+    func windowDidBecomeKey(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+
+        // Wait until window is visible before enabling cursor rects
+        if !window.occlusionState.contains(.visible) {
+            DispatchQueue.main.async { [weak self, weak window] in
+                if let window = window {
+                    self?.primeCursor(for: window)
+                }
+            }
+        } else {
+            primeCursor(for: window)
+        }
+    }
+
+    private func primeCursor(for window: NSWindow) {
+        guard let view = window.contentView else { return }
+
+        // Now let AppKit recompute cursor rects with our crosshair
+        window.enableCursorRects()
+        window.invalidateCursorRects(for: view)
+        NSCursor.crosshair.set()
+
+        // Guard against race condition on older macOS versions
+        if !hasEstablishedCursor {
+            startCursorGuard()
+        }
+    }
+
+    private func startCursorGuard() {
+        let timer = DispatchSource.makeTimerSource(queue: .main)
+        timer.schedule(deadline: .now(), repeating: .milliseconds(16))
+        timer.setEventHandler { [weak self] in
+            guard let self = self, !self.hasEstablishedCursor else {
+                self?.stopCursorGuard()
+                return
+            }
+            NSCursor.crosshair.set()
+        }
+        cursorGuardTimer = timer
+        timer.resume()
+    }
+
+    func stopCursorGuard() {
+        cursorGuardTimer?.cancel()
+        cursorGuardTimer = nil
+    }
+
+    func markCursorEstablished() {
+        hasEstablishedCursor = true
+        stopCursorGuard()
+    }
+
     func windowWillClose(_ notification: Notification) {
         print("[SelectionWindowController] windowWillClose called")
+
+        // Stop cursor guard timer
+        stopCursorGuard()
 
         // Snapshot and clear callbacks to break chains deterministically
         let rect = resultRect
@@ -185,6 +256,11 @@ class SelectionWindow: NSWindow {
         return true
     }
 
+    /// Allow window to become main window
+    override var canBecomeMain: Bool {
+        return true
+    }
+
     override init(contentRect: NSRect, styleMask style: NSWindow.StyleMask, backing backingStoreType: NSWindow.BackingStoreType, defer flag: Bool) {
         selectionView = SelectionView()
         super.init(contentRect: contentRect, styleMask: style, backing: backingStoreType, defer: flag)
@@ -203,7 +279,8 @@ class SelectionWindow: NSWindow {
 
         self.backgroundColor = NSColor.black.withAlphaComponent(0.3)
         self.isOpaque = false
-        self.level = .floating
+        self.hasShadow = false
+        self.level = .screenSaver  // Above menu bar and Dock
         self.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         self.ignoresMouseEvents = false
         self.acceptsMouseMovedEvents = true
@@ -274,6 +351,41 @@ class SelectionView: NSView {
 
     var selectionRect: CGRect = .zero
     weak var selectionWindow: SelectionWindow?
+    private var trackingArea: NSTrackingArea?
+    weak var controller: SelectionWindowController?
+
+    override func updateTrackingAreas() {
+        super.updateTrackingAreas()
+
+        // Remove all existing tracking areas
+        trackingAreas.forEach { removeTrackingArea($0) }
+
+        // Create new tracking area that covers entire view
+        // Use .activeAlways to work even when window isn't key
+        let options: NSTrackingArea.Options = [
+            .activeAlways,
+            .inVisibleRect,
+            .mouseMoved,
+            .cursorUpdate
+        ]
+
+        trackingArea = NSTrackingArea(
+            rect: bounds,
+            options: options,
+            owner: self,
+            userInfo: nil
+        )
+
+        if let area = trackingArea {
+            addTrackingArea(area)
+        }
+    }
+
+    override func cursorUpdate(with event: NSEvent) {
+        NSCursor.crosshair.set()
+        // Notify controller that cursor has been established
+        controller?.markCursorEstablished()
+    }
 
     override func resetCursorRects() {
         super.resetCursorRects()
