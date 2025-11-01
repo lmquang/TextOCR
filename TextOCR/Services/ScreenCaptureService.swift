@@ -116,6 +116,8 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
     private var resultRect: CGRect?
     private var cursorGuardTimer: DispatchSourceTimer?
     private var hasEstablishedCursor = false
+    private var globalMonitor: Any?
+    private var isInFallbackMode = false
 
     init() {
         let window = SelectionWindow()
@@ -141,11 +143,35 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
         // Freeze cursor rect updates during window activation
         window.disableCursorRects()
 
-        // Activate app and make window key
-        NSApp.activate(ignoringOtherApps: true)
+        // Try to activate app and make window key
+        NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
         window.makeKeyAndOrderFront(nil)
 
-        // Cursor will be activated in windowDidBecomeKey
+        // Wait to verify activation succeeded, otherwise use fallback mode
+        startActivationWait(window)
+    }
+
+    private func startActivationWait(_ window: NSWindow) {
+        let deadline = DispatchTime.now() + .milliseconds(200)
+        DispatchQueue.main.asyncAfter(deadline: deadline) { [weak self, weak window] in
+            guard let self = self, let window = window else { return }
+
+            let isActive = NSApp.isActive
+            let isKey = window.isKeyWindow
+            let isVisible = window.occlusionState.contains(.visible)
+            let isOnActiveSpace = window.isOnActiveSpace
+
+            print("[SelectionWindowController] Activation check - isActive: \(isActive), isKey: \(isKey), isVisible: \(isVisible), isOnActiveSpace: \(isOnActiveSpace)")
+
+            if isActive && isKey && isVisible && isOnActiveSpace {
+                // Normal mode: window is key, cursor rects will work
+                self.primeCursor(for: window)
+            } else {
+                // Fallback mode: cannot become key (e.g., System Settings is frontmost)
+                print("[SelectionWindowController] Entering fallback mode (app not active/key)")
+                self.enterInactiveFallback(for: window)
+            }
+        }
     }
 
     /// Call this when user completes or cancels selection
@@ -219,8 +245,94 @@ final class SelectionWindowController: NSWindowController, NSWindowDelegate {
         stopCursorGuard()
     }
 
+    // MARK: - Fallback Mode (for System Settings, etc.)
+
+    private func enterInactiveFallback(for window: NSWindow) {
+        isInFallbackMode = true
+
+        // Show window regardless of activation
+        window.orderFrontRegardless()
+
+        // Hide system cursor and draw our own
+        NSCursor.hide()
+
+        // Update crosshair to current mouse position
+        if let selectionView = window.contentView as? SelectionView {
+            selectionView.showCustomCrosshair = true
+            let mouseLocation = NSEvent.mouseLocation
+            let windowLocation = window.convertPoint(fromScreen: mouseLocation)
+            selectionView.crosshairLocation = windowLocation
+            selectionView.needsDisplay = true
+        }
+
+        // Start global mouse monitor to track cursor
+        startGlobalMouseMonitors(window)
+    }
+
+    private func startGlobalMouseMonitors(_ window: NSWindow) {
+        globalMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.mouseMoved, .leftMouseDown, .leftMouseDragged]) { [weak self, weak window] event in
+            guard let self = self, let window = window else { return }
+
+            // Update crosshair position
+            let mouseLocation = NSEvent.mouseLocation
+            let windowLocation = window.convertPoint(fromScreen: mouseLocation)
+
+            if let selectionView = window.contentView as? SelectionView {
+                selectionView.crosshairLocation = windowLocation
+                selectionView.needsDisplay = true
+            }
+
+            // On first click, try to activate and switch to normal mode
+            if event.type == .leftMouseDown {
+                self.stopGlobalMonitor()
+                NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
+                window.makeKeyAndOrderFront(nil)
+                self.primeCursorWhenReady(window)
+            }
+        }
+    }
+
+    private func primeCursorWhenReady(_ window: NSWindow) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(50)) { [weak self, weak window] in
+            guard let self = self, let window = window else { return }
+
+            if NSApp.isActive && window.isKeyWindow && window.occlusionState.contains(.visible) {
+                // Successfully activated, switch to normal mode
+                print("[SelectionWindowController] Switched to normal mode from fallback")
+                self.isInFallbackMode = false
+
+                // Hide custom crosshair and unhide system cursor
+                if let selectionView = window.contentView as? SelectionView {
+                    selectionView.showCustomCrosshair = false
+                    selectionView.needsDisplay = true
+                }
+                NSCursor.unhide()
+
+                // Enable normal cursor rects
+                self.primeCursor(for: window)
+            } else {
+                // Still not activated, try again
+                self.primeCursorWhenReady(window)
+            }
+        }
+    }
+
+    private func stopGlobalMonitor() {
+        if let monitor = globalMonitor {
+            NSEvent.removeMonitor(monitor)
+            globalMonitor = nil
+        }
+    }
+
     func windowWillClose(_ notification: Notification) {
         print("[SelectionWindowController] windowWillClose called")
+
+        // Clean up fallback mode resources
+        stopGlobalMonitor()
+        if isInFallbackMode {
+            NSCursor.unhide()
+            isInFallbackMode = false
+        }
 
         // Stop cursor guard timer
         stopCursorGuard()
@@ -354,6 +466,10 @@ class SelectionView: NSView {
     private var trackingArea: NSTrackingArea?
     weak var controller: SelectionWindowController?
 
+    // Custom crosshair for fallback mode
+    var showCustomCrosshair: Bool = false
+    var crosshairLocation: NSPoint = .zero
+
     override func updateTrackingAreas() {
         super.updateTrackingAreas()
 
@@ -396,6 +512,11 @@ class SelectionView: NSView {
     override func draw(_ dirtyRect: NSRect) {
         super.draw(dirtyRect)
 
+        // Draw custom crosshair if in fallback mode
+        if showCustomCrosshair {
+            drawCustomCrosshair()
+        }
+
         // Draw the selection rectangle
         if selectionRect.width > 0 && selectionRect.height > 0 {
             // Fill with semi-transparent white
@@ -411,6 +532,37 @@ class SelectionView: NSView {
             // Draw dimensions label
             drawDimensionsLabel()
         }
+    }
+
+    private func drawCustomCrosshair() {
+        let crosshairSize: CGFloat = 20
+        let lineWidth: CGFloat = 2
+
+        NSColor.white.setStroke()
+
+        // Draw horizontal line
+        let hLine = NSBezierPath()
+        hLine.move(to: NSPoint(x: crosshairLocation.x - crosshairSize, y: crosshairLocation.y))
+        hLine.line(to: NSPoint(x: crosshairLocation.x + crosshairSize, y: crosshairLocation.y))
+        hLine.lineWidth = lineWidth
+        hLine.stroke()
+
+        // Draw vertical line
+        let vLine = NSBezierPath()
+        vLine.move(to: NSPoint(x: crosshairLocation.x, y: crosshairLocation.y - crosshairSize))
+        vLine.line(to: NSPoint(x: crosshairLocation.x, y: crosshairLocation.y + crosshairSize))
+        vLine.lineWidth = lineWidth
+        vLine.stroke()
+
+        // Draw center circle
+        let circlePath = NSBezierPath(ovalIn: NSRect(
+            x: crosshairLocation.x - 3,
+            y: crosshairLocation.y - 3,
+            width: 6,
+            height: 6
+        ))
+        circlePath.lineWidth = lineWidth
+        circlePath.stroke()
     }
 
     private func drawDimensionsLabel() {
