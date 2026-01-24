@@ -62,7 +62,7 @@ class ScreenCaptureService {
     }
 
     /// Captures a specific rectangular region of the screen using ScreenCaptureKit
-    /// - Parameter rect: The CGRect to capture
+    /// - Parameter rect: The CGRect to capture (in global screen coordinates)
     /// - Parameter completion: Callback with captured image or nil if failed
     private func captureScreen(rect: CGRect, completion: @escaping (NSImage?) -> Void) {
         Task {
@@ -70,22 +70,42 @@ class ScreenCaptureService {
                 // Get available screen content
                 let content = try await SCShareableContent.excludingDesktopWindows(false, onScreenWindowsOnly: true)
 
-                guard let display = content.displays.first else {
-                    print("[ScreenCaptureService] No displays found")
+                // Find the display that contains the selection rect
+                guard let display = findDisplay(containing: rect, from: content.displays) else {
+                    print("[ScreenCaptureService] No display found containing rect: \(rect)")
                     await MainActor.run {
                         completion(nil)
                     }
                     return
                 }
 
-                // Create filter for the display
+                print("[ScreenCaptureService] Using display \(display.displayID) for capture")
+
+                // Convert global screen coordinates to display-local coordinates
+                let displayRect = CGRect(
+                    x: CGFloat(display.frame.origin.x),
+                    y: CGFloat(display.frame.origin.y),
+                    width: CGFloat(display.width),
+                    height: CGFloat(display.height)
+                )
+
+                let localRect = CGRect(
+                    x: rect.origin.x - displayRect.origin.x,
+                    y: rect.origin.y - displayRect.origin.y,
+                    width: rect.width,
+                    height: rect.height
+                )
+
+                print("[ScreenCaptureService] Display frame: \(displayRect), local rect: \(localRect)")
+
+                // Create filter for the specific display
                 let filter = SCContentFilter(display: display, excludingWindows: [])
 
-                // Configure capture with the specified rect
+                // Configure capture with the display-local rect
                 let config = SCStreamConfiguration()
                 config.width = Int(rect.width)
                 config.height = Int(rect.height)
-                config.sourceRect = rect
+                config.sourceRect = localRect
 
                 // Capture the screenshot
                 let image = try await SCScreenshotManager.captureImage(contentFilter: filter, configuration: config)
@@ -104,6 +124,38 @@ class ScreenCaptureService {
                 }
             }
         }
+    }
+
+    /// Finds the display that contains the given rect
+    /// - Parameters:
+    ///   - rect: The rect in global screen coordinates
+    ///   - displays: Available displays from ScreenCaptureKit
+    /// - Returns: The display containing the rect, or the first display if none found
+    private func findDisplay(containing rect: CGRect, from displays: [SCDisplay]) -> SCDisplay? {
+        // Calculate center point of selection
+        let centerX = rect.origin.x + rect.width / 2
+        let centerY = rect.origin.y + rect.height / 2
+
+        print("[ScreenCaptureService] Looking for display containing point (\(centerX), \(centerY))")
+
+        for display in displays {
+            let displayRect = CGRect(
+                x: CGFloat(display.frame.origin.x),
+                y: CGFloat(display.frame.origin.y),
+                width: CGFloat(display.width),
+                height: CGFloat(display.height)
+            )
+
+            print("[ScreenCaptureService] Checking display \(display.displayID): \(displayRect)")
+
+            if displayRect.contains(CGPoint(x: centerX, y: centerY)) {
+                return display
+            }
+        }
+
+        // Fallback to first display
+        print("[ScreenCaptureService] No display contains the rect, using first display")
+        return displays.first
     }
 
 }
@@ -380,14 +432,16 @@ class SelectionWindow: NSWindow {
 
 
     convenience init() {
-        // Get the main screen bounds
-        guard let screen = NSScreen.main else {
+        // Calculate the union of all screen frames to cover all displays
+        let allScreensRect = Self.calculateAllScreensRect()
+
+        guard allScreensRect.width > 0 && allScreensRect.height > 0 else {
             self.init(contentRect: .zero, styleMask: .borderless, backing: .buffered, defer: false)
             return
         }
 
-        let screenRect = screen.frame
-        self.init(contentRect: screenRect, styleMask: .borderless, backing: .buffered, defer: false)
+        print("[SelectionWindow] Creating window spanning all screens: \(allScreensRect)")
+        self.init(contentRect: allScreensRect, styleMask: .borderless, backing: .buffered, defer: false)
 
         self.backgroundColor = NSColor.black.withAlphaComponent(0.3)
         self.isOpaque = false
@@ -399,6 +453,28 @@ class SelectionWindow: NSWindow {
 
         self.contentView = selectionView
         selectionView.selectionWindow = self
+    }
+
+    /// Calculates a rect that spans all connected screens
+    private static func calculateAllScreensRect() -> CGRect {
+        let screens = NSScreen.screens
+        guard !screens.isEmpty else {
+            return .zero
+        }
+
+        // Calculate the union of all screen frames
+        var unionRect = screens[0].frame
+        for screen in screens.dropFirst() {
+            unionRect = unionRect.union(screen.frame)
+        }
+
+        print("[SelectionWindow] Screen count: \(screens.count)")
+        for (index, screen) in screens.enumerated() {
+            print("[SelectionWindow] Screen \(index): \(screen.frame)")
+        }
+        print("[SelectionWindow] Union rect: \(unionRect)")
+
+        return unionRect
     }
 
     override func mouseDown(with event: NSEvent) {
@@ -442,18 +518,29 @@ class SelectionWindow: NSWindow {
     }
 
     private func convertRectToScreenCoordinates(_ rect: CGRect) -> CGRect {
-        guard let screen = self.screen else { return rect }
+        // The window spans all screens, so window coordinates are already in global screen coordinates
+        // (with bottom-left origin like AppKit). We need to convert to top-left origin for ScreenCaptureKit.
 
-        // Convert from window coordinates (bottom-left origin) to screen coordinates (top-left origin)
-        let screenFrame = screen.frame
-        let flippedY = screenFrame.height - rect.origin.y - rect.height
+        // Find the total height of the virtual screen space (all screens combined)
+        let allScreensRect = Self.calculateAllScreensRect()
 
-        return CGRect(
-            x: rect.origin.x + screenFrame.origin.x,
-            y: flippedY + screenFrame.origin.y,
+        // Convert from bottom-left origin to top-left origin
+        // In AppKit: y=0 is at bottom, y increases upward
+        // In ScreenCaptureKit/CoreGraphics: y=0 is at top, y increases downward
+        let flippedY = allScreensRect.height - rect.origin.y - rect.height
+
+        // The window origin is at allScreensRect.origin, so add that offset
+        let globalRect = CGRect(
+            x: rect.origin.x + allScreensRect.origin.x,
+            y: flippedY + allScreensRect.origin.y,
             width: rect.width,
             height: rect.height
         )
+
+        print("[SelectionWindow] Converting rect: \(rect) -> global: \(globalRect)")
+        print("[SelectionWindow] allScreensRect: \(allScreensRect)")
+
+        return globalRect
     }
 }
 
